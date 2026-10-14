@@ -1,0 +1,56 @@
+# Aegis version catalog. Single source of truth for every version in the build.
+#
+# Version matrix (this is a COUPLED set, not "latest"; verified in a sibling project
+# of this machine that already builds and publishes with exactly these versions):
+#   Kotlin 2.1.21 supports AGP 7.3.1–8.7.2 only (official compatibility table).
+#   AGP 8.7.2 requires Gradle 8.9+ and caps compileSdk at 35.
+#   The Compose compiler plugin must be the SAME version as Kotlin, hence one `kotlin` version.
+#   Compose BOM 2025.04.01 resolves ui / foundation / animation to 1.8.0.
+
+[versions]
+agp = "8.7.2"
+kotlin = "2.1.21"
+coreKtx = "1.15.0"
+activityCompose = "1.10.1"
+lifecycle = "2.8.7"
+composeBom = "2025.04.01"
+navigationCompose = "2.8.9"
+coroutines = "1.10.2"
+# Encrypted vault storage: SQLCipher (prebuilt native libs, no NDK) + PBKDF2 from
+# javax.crypto. No Room and no annotation processors of any kind in this project.
+sqlcipher = "4.5.4"
+biometric = "1.1.0"
+securityCrypto = "1.1.0-alpha06"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+[libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
+
+# Compose — foundation only. Material3 / MaterialIcons are intentionally NOT
+# dependencies: the entire design system is custom Compose UI (AegisColors /
+# AegisIcons / ui.components). The BOM pins versions for every artifact below.
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-animation = { module = "androidx.compose.animation:animation" }
+# Inter as a downloadable font — no binary font assets in the repo.
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts" }
+
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
+sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }

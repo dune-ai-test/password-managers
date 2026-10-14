@@ -1,0 +1,25 @@
+# ---- Gradle / Android build outputs ----
+.gradle/
+build/
+app/build/
+local.properties
+*.iml
+.idea/
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# ---- Local secrets / keystores ----
+*.keystore
+*.jks
+keystore.properties
+
+# ---- OS noise ----
+Thumbs.db
+
+# ---- Session/tooling metadata ----
+.zcode/
+
+# ---- HTML mockups (local design references, not shipped in the app repo) ----
+ui/

@@ -1,0 +1,101 @@
+name: nightly
+
+# Rolling nightly prerelease for debug builds of main:
+#   push to main        -> build debug.apk -> update the `nightly` prerelease
+#   workflow_dispatch    -> same, on demand
+#
+# Deliberately no actions/upload-artifact and no separate release job: the APK is
+# attached directly to the GitHub Release as a prerelease, from the same runner
+# that built it. Pre-release keeps it out of the "Latest" section.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  # Required by `gh release create/clobber`.
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  # cancel-in-progress deliberately false: two pushes in quick succession queue
+  # rather than cancel, so no nightly build silently loses its release update.
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    name: Build debug APK, update the nightly prerelease
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.9
+
+      # Note: no setup-android step. ubuntu-latest ships ANDROID_HOME with the
+      # android-35 platform and build-tools 35 preinstalled, which is exactly what
+      # compileSdk 35 needs. assembleDebug only — no lint, no tests.
+      - name: Assemble the debug APK
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Publish the prerelease
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          TAG="nightly"
+          SRC="app/build/outputs/apk/debug/app-debug.apk"
+          SHORT_SHA="${GITHUB_SHA::7}"
+          ASSET_NAME="Aegis-nightly-${SHORT_SHA}.apk"
+          TITLE="Aegis nightly — $(date +'%Y-%m-%d') ${SHORT_SHA}"
+
+          if [ ! -f "$SRC" ]; then
+            echo "::error::assembleDebug did not produce $SRC"
+            ls -la app/build/outputs/apk/debug/ 2>/dev/null || true
+            exit 1
+          fi
+
+          # `gh release upload file.apk#label` sets only the display label — the
+          # uploaded asset NAME comes from the on-disk basename. So the file is
+          # physically renamed first to get the sha-tagged asset name.
+          STAGED="${RUNNER_TEMP}/${ASSET_NAME}"
+          cp "$SRC" "$STAGED"
+          ls -l "$STAGED"
+
+          NOTES="Automated debug-signed build from ${GITHUB_SHA}.
+          Branch: ${GITHUB_REF_NAME} · commit: ${GITHUB_SHA}
+          Debug-signed and offline by default: Aegis has no INTERNET permission."
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # Idempotent: re-runs and rapid pushes replace the release asset and
+            # its title instead of failing on "release already exists".
+            echo "Release $TAG already exists — replacing its asset."
+            gh release upload "$TAG" "$STAGED" --clobber
+            gh release edit "$TAG" \
+              --prerelease \
+              --title "$TITLE" \
+              --notes "$NOTES"
+          else
+            gh release create "$TAG" "$STAGED" \
+              --title "$TITLE" \
+              --prerelease \
+              --latest=false \
+              --target "$GITHUB_SHA" \
+              --notes "$NOTES"
+          fi
+
+          # Fail loudly rather than silently publishing a wrongly-named asset.
+          gh release view "$TAG" --json isPrerelease,assets \
+            --jq '"isPrerelease=\(.isPrerelease) assets=\([.assets[].name] | join(","))"'
