@@ -28,8 +28,8 @@ class MasterPasswordManager(private val context: Context) {
             context,
             PREFS_NAME,
             masterKey,
-            PrefKeyEncryptionScheme.AES256_SIV,
-            PrefValueEncryptionScheme.AES256_GCM,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
         )
     }
 

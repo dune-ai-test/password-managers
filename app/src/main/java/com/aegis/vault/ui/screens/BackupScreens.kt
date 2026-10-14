@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.aegis.vault.core.BackupManager
 import com.aegis.vault.core.ServiceLocator
+import com.aegis.vault.data.crypto.toHexString
 import com.aegis.vault.ui.components.AegisCard
 import com.aegis.vault.ui.components.AegisIconGraphic
 import com.aegis.vault.ui.components.AegisText
@@ -252,11 +253,7 @@ fun ChangeMasterPasswordScreen(
                                         // 2. re-key the live SQLCipher database with that passphrase
                                         // 3. swap the in-memory session passphrase (no reopen needed)
                                         val newPassphrase = master.changeMasterPassword(newPassword)
-                                        db.readable.changePassword(
-                                            com.aegis.vault.data.crypto.VaultCrypto
-                                                .toHexString(newPassphrase)
-                                                .toByteArray(),
-                                        )
+                                        db.readable.changePassword(newPassphrase.toHexString().toByteArray())
                                         locator.sessionHolder.unlock(newPassphrase)
                                         // The biometric wrap encrypts the passphrase, so the old
                                         // wrapped copy is stale after a change — drop it.

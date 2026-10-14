@@ -20,6 +20,9 @@ coroutines = "1.10.2"
 # javax.crypto. No Room and no annotation processors of any kind in this project.
 sqlcipher = "4.5.4"
 biometric = "1.1.0"
+# SQLCipher's SQLiteDatabase implements the androidx.sqlite SupportSQLiteDatabase
+# interface, so the interface artifact must be on the compile classpath.
+sqlite = "2.4.0"
 securityCrypto = "1.1.0-alpha06"
 
 [plugins]
@@ -52,5 +55,6 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+androidx-sqlite = { module = "androidx.sqlite:sqlite", version.ref = "sqlite" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }

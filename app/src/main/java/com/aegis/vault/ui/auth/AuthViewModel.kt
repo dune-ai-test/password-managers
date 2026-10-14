@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aegis.vault.core.ServiceLocator
 import com.aegis.vault.data.crypto.VaultCrypto
+import com.aegis.vault.data.crypto.toHexString
 import com.aegis.vault.data.security.BiometricGate
 import com.aegis.vault.data.security.MasterPasswordManager
 import com.aegis.vault.data.security.SecurityScanner
@@ -242,7 +243,7 @@ class AuthViewModel(private val locator: ServiceLocator) : ViewModel() {
 
     private fun openVault(passphrase: ByteArray) {
         locator.sessionHolder.unlock(passphrase)
-        locator.openVault(VaultCrypto.toHexString(passphrase))
+        locator.openVault(passphrase.toHexString())
     }
 
     private fun strengthLabel(level: Int) = strengthLabelForLevel(level)

@@ -53,7 +53,7 @@ class PasswordGenerator {
         }
 
         // Guarantee at least one character from every enabled pool.
-        val chars = pools.map { it[random.nextInt(it.size)] }.toMutableList()
+        val chars = pools.map { it[random.nextInt(it.length)] }.toMutableList()
         while (chars.size < options.length) {
             chars += pool[random.nextInt(pool.length)]
         }

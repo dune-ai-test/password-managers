@@ -13,10 +13,11 @@ import javax.crypto.Cipher
  * True when at least one biometric (or device-credential) authenticator is
  * enrolled and available.
  */
-fun canAuthenticateBiometric(context: android.content.Context): Boolean =
-    BiometricManager.from(context)
+fun canAuthenticateBiometric(context: android.content.Context): Boolean {
+    val status = BiometricManager.from(context)
         .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK)
-        == BiometricManager.BIOMETRIC_SUCCESS
+    return status == BiometricManager.BIOMETRIC_SUCCESS
+}
 
 /**
  * Hosts BiometricPrompt for the auth screens. Built from the enclosing activity

@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.sqlite)
     implementation(libs.androidx.security.crypto)
     implementation(libs.sqlcipher.android)
 }
