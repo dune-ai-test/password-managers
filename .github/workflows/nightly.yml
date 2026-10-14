@@ -46,6 +46,11 @@ jobs:
       # Note: no setup-android step. ubuntu-latest ships ANDROID_HOME with the
       # android-35 platform and build-tools 35 preinstalled, which is exactly what
       # compileSdk 35 needs. assembleDebug only — no lint, no tests.
+      # The wrapper must be executable — set the mode explicitly rather than
+      # relying on the committed file bit surviving the Windows checkout.
+      - name: Make the Gradle wrapper executable
+        run: chmod +x gradlew
+
       - name: Assemble the debug APK
         run: ./gradlew assembleDebug --no-daemon --stacktrace
 
