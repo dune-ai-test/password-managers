@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.aegis.vault.core.ServiceLocator
 import com.aegis.vault.data.security.BreachDatabase
 import com.aegis.vault.ui.components.AegisCard
-import com.aegis.vault.ui.components.AegisIconGraphic
+import com.aegis.vault.ui.icons.AegisIconGraphic
 import com.aegis.vault.ui.components.AegisText
 import com.aegis.vault.ui.components.ItemRow
 import com.aegis.vault.ui.components.ScoreRing

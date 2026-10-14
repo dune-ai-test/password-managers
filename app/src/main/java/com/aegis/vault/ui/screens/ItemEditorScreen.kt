@@ -40,7 +40,7 @@ import com.aegis.vault.data.model.LoginItem
 import com.aegis.vault.data.model.NoteItem
 import com.aegis.vault.data.security.PasswordGenerator
 import com.aegis.vault.ui.components.AegisCard
-import com.aegis.vault.ui.components.AegisIconGraphic
+import com.aegis.vault.ui.icons.AegisIconGraphic
 import com.aegis.vault.ui.components.AegisText
 import com.aegis.vault.ui.components.PressableSurface
 import com.aegis.vault.ui.components.PrimaryButton

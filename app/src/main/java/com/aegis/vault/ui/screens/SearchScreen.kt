@@ -38,7 +38,7 @@ import com.aegis.vault.core.ServiceLocator
 import com.aegis.vault.data.model.ItemType
 import com.aegis.vault.data.model.SearchResult
 import com.aegis.vault.ui.components.AegisCard
-import com.aegis.vault.ui.components.AegisIconGraphic
+import com.aegis.vault.ui.icons.AegisIconGraphic
 import com.aegis.vault.ui.components.AegisText
 import com.aegis.vault.ui.components.EmptyState
 import com.aegis.vault.ui.components.FilterChip

@@ -33,7 +33,7 @@ import com.aegis.vault.core.BackupManager
 import com.aegis.vault.core.ServiceLocator
 import com.aegis.vault.data.crypto.toHexString
 import com.aegis.vault.ui.components.AegisCard
-import com.aegis.vault.ui.components.AegisIconGraphic
+import com.aegis.vault.ui.icons.AegisIconGraphic
 import com.aegis.vault.ui.components.AegisText
 import com.aegis.vault.ui.components.PrimaryButton
 import com.aegis.vault.ui.components.ScreenBackground

@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.aegis.vault.core.ServiceLocator
 import com.aegis.vault.data.model.ItemType
 import com.aegis.vault.data.model.LoginItem
-import com.aegis.vault.ui.components.AegisIconGraphic
+import com.aegis.vault.ui.icons.AegisIconGraphic
 import com.aegis.vault.ui.components.AegisText
 import com.aegis.vault.ui.components.CategoryTile
 import com.aegis.vault.ui.components.ItemRow

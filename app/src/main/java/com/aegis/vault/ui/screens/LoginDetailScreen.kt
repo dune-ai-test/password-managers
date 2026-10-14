@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.aegis.vault.core.ServiceLocator
 import com.aegis.vault.ui.components.AegisCard
-import com.aegis.vault.ui.components.AegisIconGraphic
+import com.aegis.vault.ui.icons.AegisIconGraphic
 import com.aegis.vault.ui.components.AegisText
 import com.aegis.vault.ui.components.ActionRow
 import com.aegis.vault.ui.components.ConfirmDialog
