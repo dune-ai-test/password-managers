@@ -67,7 +67,7 @@ private fun PathBuilder.parseSvgPath(data: String) {
     var command = " "
 
     fun skipSeparators() {
-        while (index < data.length && (data[index].isWhitespace() || data[index] == ",")) index++
+        while (index < data.length && (data[index].isWhitespace() || data[index] == ',')) index++
     }
 
     fun nextFloat(): Float {
@@ -87,12 +87,13 @@ private fun PathBuilder.parseSvgPath(data: String) {
         }
         when (command) {
             "M" -> moveTo(nextFloat(), nextFloat())
-            "m" -> moveRelative(nextFloat(), nextFloat())
+            "m" -> moveToRelative(nextFloat(), nextFloat())
             "L" -> lineTo(nextFloat(), nextFloat())
-            "l" -> lineRelative(nextFloat(), nextFloat())
-            "q" -> quadraticTo(nextFloat(), nextFloat(), nextFloat(), nextFloat())
-            "Q" -> quadraticBezierTo(nextFloat(), nextFloat(), nextFloat(), nextFloat())
-            else -> skipSeparators()
+            "l" -> lineToRelative(nextFloat(), nextFloat())
+            "q" -> quadToRelative(nextFloat(), nextFloat(), nextFloat(), nextFloat())
+            "Q" -> quadTo(nextFloat(), nextFloat(), nextFloat(), nextFloat())
+            // Unknown command or stray separator: always advance so parsing terminates.
+            else -> skipSeparators().also { if (index < data.length && data[index].isLetter().not() && !data[index].isWhitespace() && data[index] != ',') index++ }
         }
     }
 }
