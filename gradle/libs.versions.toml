@@ -48,8 +48,6 @@ androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-animation = { module = "androidx.compose.animation:animation" }
-# Inter as a downloadable font — no binary font assets in the repo.
-androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
