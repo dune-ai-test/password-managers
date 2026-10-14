@@ -3,7 +3,7 @@ package com.aegis.vault.data.local
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
-import net.sqlcipher.database.SQLiteDatabase
+import net.zetetic.database.sqlcipher.SQLiteDatabase
 import java.io.File
 
 /**
@@ -67,11 +67,11 @@ class VaultDatabase(private val db: SQLiteDatabase) {
             const val DB_VERSION = 1
 
             /**
-             * Loads the bundled SQLCipher native library. Must run before any
-             * `net.sqlcipher` class is touched. Safe to call more than once:
-             * SQLCipher's own loadLibs already guards against double loading.
+             * Loads the bundled SQLCipher native library. This must run before any
+             * `net.zetetic.database.sqlcipher` class is touched. Calling it more
+             * than once is harmless (System.loadLibrary is idempotent per loader).
              */
-            fun loadNativeLib(context: Context) = SQLiteDatabase.loadLibs(context)
+            fun loadNativeLib() = System.loadLibrary("sqlcipher")
 
             /**
              * Opens (creating on first use) the vault at [passphraseHex]. SQLCipher 4
@@ -79,10 +79,15 @@ class VaultDatabase(private val db: SQLiteDatabase) {
              * security target, so no PRAGMA tuning is needed.
              */
             fun open(context: Context, passphraseHex: String): VaultDatabase {
-                loadNativeLib(context)
+                loadNativeLib()
                 val file: File = context.getDatabasePath(DB_NAME)
                 file.parentFile?.mkdirs()
-                val db = SQLiteDatabase.openOrCreateDatabase(file, passphraseHex, null)
+                val db = SQLiteDatabase.openOrCreateDatabase(
+                    file,
+                    passphraseHex.toByteArray(),
+                    /* cursorFactory = */ null,
+                    /* errorHandler = */ null,
+                )
                 createSchema(db)
                 return VaultDatabase(db)
             }

@@ -56,8 +56,8 @@ class AegisAutofillService : AutofillService() {
 
         scope.launch {
             val fields = collectFields(structure)
-            val usernameIds = fields.first
-            val passwordIds = fields.second
+            val usernameIds = fields.usernameIds
+            val passwordIds = fields.passwordIds
             if (usernameIds.isEmpty() || passwordIds.isEmpty()) {
                 callback.onSuccess(null)
                 return@launch
