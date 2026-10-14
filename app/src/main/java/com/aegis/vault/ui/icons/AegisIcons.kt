@@ -73,8 +73,8 @@ private fun PathBuilder.parseSvgPath(data: String) {
     fun nextFloat(): Float {
         skipSeparators()
         val start = index
-        if (index < data.length && (data[index] == "-" || data[index] == "+")) index++
-        while (index < data.length && (data[index].isDigit() || data[index] == ".")) index++
+        if (index < data.length && (data[index] == '-' || data[index] == '+')) index++
+        while (index < data.length && (data[index].isDigit() || data[index] == '.')) index++
         return data.substring(start, index).toFloat()
     }
 
