@@ -230,15 +230,21 @@ class ItemDao(private val db: VaultDatabase) {
     fun search(query: String, types: Set<ItemType> = ItemType.entries.toSet()): List<SearchResult> {
         if (query.isBlank()) return emptyList()
         val q = "%${query.trim().lowercase()}%"
+        // "wifi" should also match "Wi-Fi": compare with separators stripped on both sides.
+        val nq = "%${query.trim().lowercase().filter { it.isLetterOrDigit() }}%"
         val results = mutableListOf<SearchResult>()
         if (ItemType.Login in types) {
             db.rawQuery(
                 """
                 SELECT * FROM $TABLE_LOGIN WHERE trashed_at IS NULL
-                AND (lower(title) LIKE ? OR lower(username) LIKE ? OR lower(website) LIKE ? OR lower(notes) LIKE ?)
+                AND (
+                    lower(title) LIKE ? OR replace(lower(title),'-','') LIKE ?
+                    OR lower(username) LIKE ? OR lower(website) LIKE ?
+                    OR replace(lower(website),'.','') LIKE ? OR lower(notes) LIKE ?
+                )
                 ORDER BY last_modified DESC LIMIT 30
                 """.trimIndent(),
-                arrayOf(q, q, q, q),
+                arrayOf(q, nq, q, q, nq, q),
             ).use { c ->
                 while (c.moveToNext()) {
                     val item = c.toLogin()
@@ -250,10 +256,11 @@ class ItemDao(private val db: VaultDatabase) {
             db.rawQuery(
                 """
                 SELECT * FROM $TABLE_CARD WHERE trashed_at IS NULL
-                AND (lower(title) LIKE ? OR lower(cardholder) LIKE ? OR lower(number) LIKE ?)
+                AND (lower(title) LIKE ? OR lower(cardholder) LIKE ? OR lower(number) LIKE ?
+                     OR replace(lower(title),'-','') LIKE ?)
                 ORDER BY last_modified DESC LIMIT 30
                 """.trimIndent(),
-                arrayOf(q, q, q),
+                arrayOf(q, q, q, nq),
             ).use { c ->
                 while (c.moveToNext()) {
                     val item = c.toCard()
@@ -265,10 +272,11 @@ class ItemDao(private val db: VaultDatabase) {
             db.rawQuery(
                 """
                 SELECT * FROM $TABLE_NOTE WHERE trashed_at IS NULL
-                AND (lower(title) LIKE ? OR lower(body) LIKE ?)
+                AND (lower(title) LIKE ? OR lower(body) LIKE ?
+                     OR replace(lower(title),'-','') LIKE ? OR replace(lower(body),'-','') LIKE ?)
                 ORDER BY last_modified DESC LIMIT 30
                 """.trimIndent(),
-                arrayOf(q, q),
+                arrayOf(q, q, nq, nq),
             ).use { c ->
                 while (c.moveToNext()) {
                     val item = c.toNote()
@@ -280,10 +288,11 @@ class ItemDao(private val db: VaultDatabase) {
             db.rawQuery(
                 """
                 SELECT * FROM $TABLE_IDENTITY WHERE trashed_at IS NULL
-                AND (lower(title) LIKE ? OR lower(first_name) LIKE ? OR lower(last_name) LIKE ? OR lower(email) LIKE ?)
+                AND (lower(title) LIKE ? OR lower(first_name) LIKE ? OR lower(last_name) LIKE ? OR lower(email) LIKE ?
+                     OR replace(lower(title),'-','') LIKE ?)
                 ORDER BY last_modified DESC LIMIT 30
                 """.trimIndent(),
-                arrayOf(q, q, q, q),
+                arrayOf(q, q, q, q, nq),
             ).use { c ->
                 while (c.moveToNext()) {
                     val item = c.toIdentity()

@@ -87,7 +87,8 @@ object SeedData {
             password = "Tr0ut!Run-2023-Vault",
             website = "https://chase.com",
             notes = "Bank account — unique password, 2FA via SMS.",
-            modifiedDaysAgo = 120,
+            // Untouched for years, like the mockup's "Unchanged for 3 years" row.
+            modifiedDaysAgo = 1100,
             createdDaysAgo = 1900,
         ),
         login(
