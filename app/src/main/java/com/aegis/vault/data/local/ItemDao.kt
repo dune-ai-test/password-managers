@@ -44,10 +44,12 @@ class ItemDao(private val db: VaultDatabase) {
             .put("totp_secret", item.totpSecret)
             .put("is_demo", if (item.isDemo) 1 else 0)
             .put("created_at", if (item.createdAt != 0L) item.createdAt else now())
-            .put("last_modified", now())
+            .put("last_modified", if (item.lastModified != 0L) item.lastModified else now())
         db.insert(TABLE_LOGIN, row)
         if (historyPassword != null) addPasswordHistory(item.id, historyPassword)
-        return item.copy(createdAt = if (item.createdAt != 0L) item.createdAt else now(), lastModified = now())
+        val createdAt = if (item.createdAt != 0L) item.createdAt else now()
+        val lastModified = if (item.lastModified != 0L) item.lastModified else now()
+        return item.copy(createdAt = createdAt, lastModified = lastModified)
     }
 
     fun updateLogin(item: LoginItem, previousPassword: String? = null): LoginItem {
