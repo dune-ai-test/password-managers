@@ -1,6 +1,9 @@
 package com.aegis.vault.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,6 +59,18 @@ import com.aegis.vault.ui.theme.AegisType
  * L2 — Create master password. Strength meter, three requirement checks, the
  * un-recoverable warning, and the fingerprint-unlock opt-in.
  */
+/**
+ * True while the software keyboard is on screen. With edge-to-edge + SDK 35 the
+ * window does not resize for the IME, so screens observe this to scroll their
+ * primary action into view.
+ */
+@Composable
+private fun imeVisible(): Boolean {
+    val density = LocalDensity.current
+    val bottom = WindowInsets.ime.getBottom(density)
+    return bottom > 0
+}
+
 @Composable
 fun CreateMasterPasswordScreen(
     locator: ServiceLocator,
@@ -68,6 +83,8 @@ fun CreateMasterPasswordScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val colors = AegisTheme.colors
     val promptHost = rememberBiometricPromptHost()
+    val scrollState = rememberScrollState()
+    val imeOpen = imeVisible()
 
     BiometricPromptEffects(viewModel = viewModel, host = promptHost)
 
@@ -76,13 +93,18 @@ fun CreateMasterPasswordScreen(
         if (state.vaultReady) onReady()
     }
 
+    // With the keyboard up, bring Continue above it automatically.
+    LaunchedEffect(imeOpen) {
+        if (imeOpen) scrollState.animateScrollTo(scrollState.maxValue)
+    }
+
     ScreenBackground {
         Column(modifier = Modifier.fillMaxSize()) {
             TopNavBar(title = "", onBack = onBack, backContentDescription = "Back")
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
                     .imePadding()
                     .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 32.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -247,6 +269,8 @@ fun UnlockScreen(
     val colors = AegisTheme.colors
     val promptHost = rememberBiometricPromptHost()
     var forgotNote by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+    val imeOpen = imeVisible()
 
     BiometricPromptEffects(viewModel = viewModel, host = promptHost)
 
@@ -255,11 +279,16 @@ fun UnlockScreen(
         if (state.vaultReady) onUnlocked()
     }
 
+    // Keep Unlock above the keyboard.
+    LaunchedEffect(imeOpen) {
+        if (imeOpen) scrollState.animateScrollTo(scrollState.maxValue)
+    }
+
     ScreenBackground {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .imePadding()
                 .padding(start = 24.dp, end = 24.dp, top = 32.dp, bottom = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
