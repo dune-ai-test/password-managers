@@ -223,6 +223,7 @@ fun ItemEditorScreen(
 
                 // Form.
                 AegisCard(modifier = Modifier.fillMaxWidth(), contentPadding = 4.dp) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
                     when (selectedType) {
                         ItemType.Login -> {
                             FormRow("Title", title, { title = it }, placeholder = "github.com")
@@ -264,6 +265,7 @@ fun ItemEditorScreen(
                             FormRow("Phone", phone, { phone = it }, keyboardType = KeyboardType.Phone)
                             FormRow("Address", address, { address = it })
                         }
+                    }
                     }
                 }
 

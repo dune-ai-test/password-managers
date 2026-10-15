@@ -73,7 +73,7 @@ fun VaultScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 120.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 170.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // Header: screen title + avatar.
@@ -257,7 +257,7 @@ internal fun buildAttentionRows(logins: List<LoginItem>): List<AttentionRow> {
                 loginId = first.id,
                 badgeLetter = members.size.toString(),
                 badgeColor = androidx.compose.ui.graphics.Color(0xFFFF9500),
-                title = "${maskedPreview(password)} reused",
+                title = "$password reused",
                 subtitle = "${members.size} accounts share it",
             )
         }
@@ -281,6 +281,3 @@ internal fun buildAttentionRows(logins: List<LoginItem>): List<AttentionRow> {
     return rows
 }
 
-/** Short masked preview of a reused password, e.g. "Summer21!" → first 3 chars + dots. */
-private fun maskedPreview(password: String): String =
-    if (password.length <= 3) password else password.take(3) + "•".repeat(4)

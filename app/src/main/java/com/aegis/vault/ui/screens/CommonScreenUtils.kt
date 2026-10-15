@@ -64,7 +64,7 @@ fun relativeTime(timestamp: Long, now: Long = System.currentTimeMillis()): Strin
     val days = TimeUnit.MILLISECONDS.toDays(delta)
     return when {
         minutes < 1 -> "just now"
-        minutes < 60 -> "$minutes minutes ago"
+        minutes < 60 -> if (minutes == 1L) "1 minute ago" else "$minutes minutes ago"
         hours < 24 -> if (hours == 1L) "1 hour ago" else "$hours hours ago"
         days < 30 -> if (days == 1L) "1 day ago" else "$days days ago"
         days < 365 -> "${days / 30} months ago"

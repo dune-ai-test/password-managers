@@ -118,7 +118,7 @@ fun CategoryScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 120.dp),
+                    .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 170.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 AegisText(

@@ -222,7 +222,7 @@ fun DetailRow(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    labelWidth: Dp = 104.dp,
+    labelWidth: Dp = 112.dp,
     onClick: (() -> Unit)? = null,
     trailingIcon: AegisIcon? = null,
 ) {
@@ -250,7 +250,9 @@ fun DetailRow(
             color = colors.textSecondary,
             modifier = Modifier.width(labelWidth),
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
+        Box(Modifier.size(12.dp))
         AegisText(
             text = value,
             style = AegisType.body,

@@ -109,7 +109,10 @@ fun AegisNavHost() {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val showTabBar = currentRoute in TAB_ROUTES
+    // The mockups keep the tab bar on every screen inside the vault (tabs, category
+    // lists, detail screens, search) and hide it only on the pre-vault auth screens.
+    val authRoutes = listOf(Routes.ONBOARDING, Routes.CREATE_MASTER, Routes.UNLOCK)
+    val showTabBar = currentRoute != null && currentRoute !in authRoutes
 
     Box(modifier = Modifier.fillMaxSize()) {
         NavHost(

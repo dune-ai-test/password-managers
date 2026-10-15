@@ -93,7 +93,7 @@ fun SearchScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp)
-                .padding(top = 12.dp, bottom = 100.dp),
+                .padding(top = 12.dp, bottom = 170.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // Search field.
