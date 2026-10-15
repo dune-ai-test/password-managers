@@ -23,3 +23,6 @@ Thumbs.db
 
 # ---- HTML mockups (local design references, not shipped in the app repo) ----
 /ui/
+
+# ---- Local QA artifacts (screenshots + downloaded APKs) ----
+shots/
